@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "rate": 10,
+  "mode": "image",
+  "role": "鲸鲸",
+  "max_chars": 28,
+  "auto_mood": true,
+  "python": "",
+  "renderer": "renderer/render.py",
+  "cards": "renderer/cards.json",
+  "project_dir": ""
+}

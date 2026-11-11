@@ -1,0 +1,9 @@
+# 本地自己的配置和素材，不进仓库
+astrbot_plugin_whale_card/config.json
+renderer/cards.json
+renderer/images/
+renderer/font.ttf
+*.log.jsonl
+__pycache__/
+*.pyc
+.vscode/

@@ -1,0 +1,9 @@
+name: astrbot_plugin_whale_card
+display_name: 传话纸 · 让机器人举牌子
+desc: 机器人说话时按概率把这句话画成「角色举着纸/牌子」的图片发出去，字就写在牌子上；太长、带链接、不是中文、已经在发表情包的消息会原样跳过
+help: 装好后改插件目录里的 config.json：rate 是百分比（10 = 每百句十张左右），mode 是 image（只发图）或 both（文字+图），role 选 cards.json 里的角色。
+version: v1.0.0
+author: suanningmeng-suan
+support_platforms:
+  - aiocqhttp
+repo: https://github.com/suanningmeng-suan/dafeiyu-whale-card

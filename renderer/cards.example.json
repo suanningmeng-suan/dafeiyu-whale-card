@@ -1,0 +1,36 @@
+{
+  "_说明": "每个角色一套：images 是 心情 -> 底图路径（相对本文件），rows/pages/quad 三选一描述「字能写在哪」。",
+
+  "鲸鲸": {
+    "images": {
+      "#普通#": "images/whale/base.png",
+      "#开心#": "images/whale/happy.png",
+      "#微笑#": "images/whale/smile.png",
+      "#不解#": "images/whale/confused.png"
+    },
+    "rows": [[675, 298, 745], [790, 300, 745], [905, 316, 684]],
+    "font": "font.ttf",
+    "color": [34, 38, 56],
+    "bracket_color": [128, 0, 128],
+    "alpha": 0.8,
+    "max_font_height": 76,
+    "max_chars": 8,
+    "line_spacing": 0.12
+  },
+
+  "木花猫猫": {
+    "images": {
+      "#普通#": "images/cat/base.png"
+    },
+    "quad": [[32, 200], [556, 46], [662, 352], [138, 607]],
+    "pad_x": 0.13,
+    "pad_y": 0.17,
+    "font": "font.ttf",
+    "color": [92, 62, 38],
+    "bracket_color": [128, 0, 128],
+    "alpha": 0.72,
+    "max_font_height": 96,
+    "max_chars": 8,
+    "line_spacing": 0.10
+  }
+}
