@@ -1,3 +1,9 @@
+## 下载（可直接用）
+
+- **电脑版（Windows）**：[whale-card-desktop.zip](https://github.com/suanningmeng-suan/dafeiyu-whale-card/releases/download/v1.0.0/whale-card-desktop.zip) —— 解压后双击 `启动.bat`
+- **手机版（安卓 10+）**：[whale-card-mobile.zip](https://github.com/suanningmeng-suan/dafeiyu-whale-card/releases/download/v1.0.0/whale-card-mobile.zip) —— 里面是 APK，覆盖安装即可
+
+手机版 SHA-256：`93c3c642924ce2a526789c20225ed07251f3fdb6e3be7945f3be22d1f700df38`
 # 传话纸 · 让机器人举牌子说话
 
 把机器人要说的话，画成一张「角色举着纸 / 木牌」的图片发出去——字就写在纸上，
