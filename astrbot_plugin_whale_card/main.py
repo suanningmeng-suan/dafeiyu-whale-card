@@ -25,7 +25,7 @@ from pathlib import Path
 
 from astrbot import logger
 from astrbot.api.event import AstrMessageEvent, filter
-from astrbot.api.message_components import Image, Plain
+from astrbot.api.message_components import Image, Plain, Record
 from astrbot.api.star import Context, Star
 
 PLUGIN_DIR = Path(__file__).resolve().parent
@@ -139,9 +139,46 @@ def render_card(cfg, text, role, expr):
         return None, repr(exc)
 
 
+CREDIT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".credit.json")
+
+
+def load_credit():
+    """进位余量（0~1），跨消息保留，保证长期发图比例精确。"""
+    try:
+        with open(CREDIT_FILE, "r", encoding="utf-8") as f:
+            v = float(json.load(f).get("credit", 0.0))
+        if 0.0 <= v < 1.0:
+            return v
+    except Exception:
+        pass
+    return random.random()  # 首次随机起步，别永远卡在同一个相位
+
+
+def save_credit(v):
+    try:
+        with open(CREDIT_FILE, "w", encoding="utf-8") as f:
+            json.dump({"credit": round(float(v), 6)}, f)
+    except Exception:
+        pass
+
+
+def roll_rate(rate):
+    """按百分比决定这一句发不发，返回 (是否发, 新的进位)。
+
+    做法是 Bresenham 式进位：每句把 rate/100 加进账本，攒够 1 就发一张、账本减 1。
+    rate=30 时发送位置是第 4、7、10… 句，长期精确 30%，间隔稳定在 3~4 句。
+    """
+    credit = load_credit() + max(0.0, min(100.0, rate)) / 100.0
+    hit = credit >= 1.0
+    if hit:
+        credit -= 1.0
+    save_credit(credit)
+    return hit, credit
+
 def should_skip(chain, text, max_chars):
     """这条消息不该变成传话纸吗？返回 (跳过, 原因)。"""
-    others = [type(c).__name__ for c in chain if type(c).__name__ != "Plain"]
+    # Record 是 AstrBot 的语音组件：整句被转成语音时也要能画成牌子，所以不算「不适合」
+    others = [type(c).__name__ for c in chain if type(c).__name__ not in ("Plain", "Record")]
     if others:
         return True, "has:" + ",".join(sorted(set(others))[:3])
 
@@ -182,8 +219,13 @@ class WhaleCardQQ(Star):
             return
 
         rate = max(0, min(100, int(cfg.get("rate") or 0)))
-        if rate <= 0 or random.random() * 100 >= rate:
-            append_log({"kind": "skip", "why": "rate %d%%" % rate, "text": text[:60]})
+        if rate <= 0:
+            append_log({"kind": "skip", "why": "rate 0%", "text": text[:60]})
+            return
+        # 「精准」发图：进位记账代替掷骰子 —— 每句加 rate/100，攒满 1 发一张。
+        hit, credit = roll_rate(rate)
+        if not hit:
+            append_log({"kind": "skip", "why": "rate %d%% (credit %.2f)" % (rate, credit), "text": text[:60]})
             return
 
         expr = (guess_mood(text) if cfg.get("auto_mood", True) else None) or "#普通#"
